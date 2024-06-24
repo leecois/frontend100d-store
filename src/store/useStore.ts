@@ -4,6 +4,7 @@ import { create } from "zustand";
 interface Brand {
   _id: string;
   brandName: string;
+  watchCount: number;
 }
 
 interface Comment {
@@ -39,14 +40,24 @@ interface StoreState {
   end: number;
   setBrands: () => void;
   setWatches: () => void;
-  fetchWatchDetails: (watchId: string) => void; 
+  fetchWatchDetails: (watchId: string) => void;
   selectBrand: (brandId: string | null) => void;
   setQuery: (query: string) => void;
   setSort: (sort: string) => void;
   setOrder: (order: "asc" | "desc") => void;
   setRange: (start: number, end: number) => void;
-  addComment: (watchId: string, rating: number, content: string, author: { _id: string, membername: string }) => void;
-  updateComment: (watchId: string, commentId: string, content: string, rating: number) => void;
+  addComment: (
+    watchId: string,
+    rating: number,
+    content: string,
+    author: { _id: string; membername: string }
+  ) => void;
+  updateComment: (
+    watchId: string,
+    commentId: string,
+    content: string,
+    rating: number
+  ) => void;
   deleteComment: (watchId: string, commentId: string) => void;
 }
 
@@ -62,7 +73,15 @@ export const useStore = create<StoreState>((set, get) => ({
   setBrands: async () => {
     try {
       const response = await axiosClient.get("/brands");
-      set({ brands: response.data });
+      const brandsWithCounts = await Promise.all(
+        response.data.map(async (brand: Brand) => {
+          const watchesResponse = await axiosClient.get(
+            `/watches?brand=${brand._id}`
+          );
+          return { ...brand, watchCount: watchesResponse.data.length };
+        })
+      );
+      set({ brands: brandsWithCounts });
     } catch (error) {
       console.error("Failed to fetch brands", error);
     }
@@ -123,7 +142,7 @@ export const useStore = create<StoreState>((set, get) => ({
         rating,
         content,
       });
-      get().fetchWatchDetails(watchId); 
+      get().fetchWatchDetails(watchId);
     } catch (error) {
       console.error("Failed to add comment", error);
     }

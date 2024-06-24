@@ -5,27 +5,24 @@ const Sidebar = () => {
   const { brands, selectedBrand, selectBrand } = useStore();
 
   return (
-    <div className="flex flex-col w-full p-4">
+    <div className="flex flex-col w-full">
       <h2 className="font-semibold text-xl mb-4">Brands</h2>
       <Button
+        variant={selectedBrand === null ? "default" : "ghost"}
+        className="justify-start mb-2"
         onClick={() => selectBrand(null)}
-        className={`p-2 mb-2 w-full text-center rounded-lg ${
-          selectedBrand === null ? "bg-gray-800 text-white" : "bg-gray-100 text-black"
-        }`}
       >
         Show All
       </Button>
       {brands.map((brand) => (
         <Button
           key={brand._id}
+          variant={selectedBrand === brand._id ? "default" : "ghost"}
+          className="justify-between mb-2"
           onClick={() => selectBrand(brand._id)}
-          className={`p-2 mb-2 w-full text-center rounded-lg ${
-            selectedBrand === brand._id
-              ? "bg-gray-800 text-white"
-              : "bg-gray-100 text-black"
-          }`}
         >
           {brand.brandName}
+          <span className="text-sm text-gray-500">{brand.watchCount}</span>
         </Button>
       ))}
     </div>
