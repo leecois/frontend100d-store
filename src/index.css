@@ -85,3 +85,18 @@
     @apply w-full h-full flex flex-col;
   }
 }
+
+.card-hover {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.card-hover:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.card-image {
+  border-radius: 8px;
+  overflow: hidden;
+}
+.card-content {
+  text-align: center;
+}

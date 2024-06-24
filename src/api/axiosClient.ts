@@ -9,7 +9,6 @@ const axiosClient = axios.create({
   },
 });
 
-// Request interceptor
 axiosClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -23,7 +22,6 @@ axiosClient.interceptors.request.use(
   }
 );
 
-// Response interceptor
 axiosClient.interceptors.response.use(
   (response) => {
     return response;
@@ -31,7 +29,6 @@ axiosClient.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       // Handle unauthorized access
-      // For example, redirect to login page
     }
     return Promise.reject(error);
   }

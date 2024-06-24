@@ -30,9 +30,10 @@ export function Login() {
       const response = await signin(email, password);
       const {
         authentication: { sessionToken },
+        ...user
       } = response;
 
-      login(sessionToken);
+      login(sessionToken, user);
       navigate("/");
     } catch (err) {
       setError("Invalid email or password");
@@ -60,7 +61,7 @@ export function Login() {
               <Input
                 id="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="khanh@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -69,12 +70,6 @@ export function Login() {
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
-                <NavLink
-                  to="#"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </NavLink>
               </div>
               <Input
                 id="password"

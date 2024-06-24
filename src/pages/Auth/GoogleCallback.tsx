@@ -9,14 +9,16 @@ export function GoogleCallback() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
+    const user = urlParams.get("user");
 
-    if (token) {
-      login(token);
+    if (token && user) {
+      const userObj = JSON.parse(decodeURIComponent(user));
+      login(token, userObj);
       navigate("/");
     } else {
       navigate("/auth/login");
     }
-  }, [navigate]);
+  }, [login, navigate]);
 
   return <div>Loading...</div>;
 }
